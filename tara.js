@@ -1,5 +1,6 @@
 var apiKeys = require('./keys')
 var Twitter = require('twitter');
+var spotify = require('spotify');
 
 var client = new Twitter({
   consumer_key: apiKeys.twitterKeys.consumer_key,
@@ -20,8 +21,18 @@ switch(command) {
       }
     });
     break;
-  case "command":
-    console.log('Hello World');
+  case "spotify-this-song":
+    var song = process.argv[3];
+    spotify.search({ type: 'track', query: song, limit: 5 }, function(err, data) {
+      if ( err ) {
+        console.log('Error occurred: ' + err);
+        return;
+      }
+      data.tracks.items[0].artists.forEach(function(artist){
+        console.log('Artist Name:', artist.name);
+      })
+      console.log('Album Name:', data.tracks.items[0].album.name);
+    });
     break;
   case "command":
     console.log('Hello World');
@@ -33,3 +44,9 @@ switch(command) {
     console.log("Dobby taught me...")
     break
 }
+
+
+// Do something with 'data'
+// console.log("song name: ", data.tracks.items[0]) // Do something with 'data'
+// console.log("preview link: ", data.tracks.items[0]) // Do something with 'data'
+// console.log("album", data.tracks.items[0]) // Do something with 'data'
