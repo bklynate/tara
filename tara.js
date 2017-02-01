@@ -23,16 +23,22 @@ switch(command) {
     break;
   case "spotify-this-song":
     var song = process.argv[3];
-    spotify.search({ type: 'track', query: song, limit: 5 }, function(err, data) {
-      if ( err ) {
-        console.log('Error occurred: ' + err);
-        return;
-      }
-      data.tracks.items[0].artists.forEach(function(artist){
-        console.log('Artist Name:', artist.name);
-      })
-      console.log('Album Name:', data.tracks.items[0].album.name);
-    });
+    if(!song) {
+      console.log('"The Sign" by Ace of Base')
+    } else {
+      spotify.search({ type: 'track', query: song, limit: 5 }, function(err, data) {
+        if ( err ) {
+          console.log('Error occurred: ' + err);
+          return;
+        }
+        data.tracks.items[0].artists.forEach(function(artist){
+          console.log('Artist Name:', artist.name);
+        })
+        console.log('Album Name:', data.tracks.items[0].album.name);
+        console.log('Song Name:', data.tracks.items[0].name);
+        console.log('Preview Url:', data.tracks.items[0].preview_url);
+      });
+    }
     break;
   case "command":
     console.log('Hello World');
