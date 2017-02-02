@@ -1,6 +1,8 @@
-var apiKeys = require('./keys')
+var apiKeys = require('./keys');
 var Twitter = require('twitter');
-var spotify = require('spotify');
+var Spotify = require('spotify');
+var Request = require('request');
+var fs = require('fs');
 
 var client = new Twitter({
   consumer_key: apiKeys.twitterKeys.consumer_key,
@@ -23,30 +25,67 @@ switch(command) {
     break;
   case "spotify-this-song":
     var song = process.argv[3];
-    spotify.search({ type: 'track', query: song, limit: 5 }, function(err, data) {
-      if ( err ) {
-        console.log('Error occurred: ' + err);
-        return;
+    if(!song) {
+      console.log('"The Sign" by Ace of Base')
+    } else {
+      Spotify.search({ type: 'track', query: song, limit: 5 }, function(err, data) {
+        if ( err ) {
+          console.log('Error occurred: ' + err);
+          return;
+        }
+        data.tracks.items[0].artists.forEach(function(artist){
+          console.log('Artist Name:', artist.name);
+        })
+        console.log('Album Name:', data.tracks.items[0].album.name);
+        console.log('Song Name:', data.tracks.items[0].name);
+        console.log('Preview Url:', data.tracks.items[0].preview_url);
+      });
+    }
+    break;
+  case "movie-this":
+    var movie = process.argv[3];
+    if(!movie){
+      movie = "Mr. Nobody"
+      Request("http://www.omdbapi.com/?t="+movie+"&y=&plot=short&r=json", function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+          bodyJSON = JSON.parse(body)
+          console.log("Movie Title:", bodyJSON.Title)
+          console.log("Movie Year:", bodyJSON.Year)
+          console.log("IMDB Rating:", bodyJSON.imdbRating)
+          console.log("Movie Origin:", bodyJSON.Country)
+          console.log("Available Languages:", bodyJSON.Language)
+          console.log("Movie Plot:", bodyJSON.Plot)
+          console.log("Movie Actors:", bodyJSON.Actors)
+          console.log("Metascore:", bodyJSON.Metascore)
+        }
+      });
+    } else {
+      Request("http://www.omdbapi.com/?t="+movie+"&y=&plot=short&r=json", function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+          bodyJSON = JSON.parse(body)
+          console.log("Movie Title:", bodyJSON.Title)
+          console.log("Movie Year:", bodyJSON.Year)
+          console.log("IMDB Rating:", bodyJSON.imdbRating)
+          console.log("Movie Origin:", bodyJSON.Country)
+          console.log("Available Languages:", bodyJSON.Language)
+          console.log("Movie Plot:", bodyJSON.Plot)
+          console.log("Movie Actors:", bodyJSON.Actors)
+          console.log("Metascore:", bodyJSON.Metascore)
+        }
+      });
+    }
+    break;
+  case "do-what-it-says":
+    var filename = process.argv[3];
+    fs.readFile(filename, function(error, data){
+      if(error) {
+        console.log(error);
+      } else {
+        console.log(data.toString().split(","));
       }
-      data.tracks.items[0].artists.forEach(function(artist){
-        console.log('Artist Name:', artist.name);
-      })
-      console.log('Album Name:', data.tracks.items[0].album.name);
     });
     break;
-  case "command":
-    console.log('Hello World');
-    break;
-  case "command":
-    console.log('Hello World');
-    break;
   default:
-    console.log("Dobby taught me...")
+    console.log("Tara knows...")
     break
 }
-
-
-// Do something with 'data'
-// console.log("song name: ", data.tracks.items[0]) // Do something with 'data'
-// console.log("preview link: ", data.tracks.items[0]) // Do something with 'data'
-// console.log("album", data.tracks.items[0]) // Do something with 'data'

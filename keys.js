@@ -1,5 +1,5 @@
-console.log('Locked and Loaded!');
-
+console.log('Let me see what I can find...');
+console.log("")
 exports.twitterKeys = {
   consumer_key: 'L1KL69qkKihj8d4s1xF6AOPJE',
   consumer_secret: 'UiwSAYgY9FuIdscWL3AqMEsvhltkSo35PFz784rI6oJAC2Zg8H',
