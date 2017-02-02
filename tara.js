@@ -29,6 +29,7 @@ switch(command) {
       console.log('"The Sign" by Ace of Base')
     } else {
       Spotify.search({ type: 'track', query: song, limit: 5 }, function(err, data) {
+<<<<<<< HEAD
         if ( err ) {
           console.log('Error occurred: ' + err);
           return;
@@ -89,3 +90,65 @@ switch(command) {
     console.log("Tara knows...")
     break
 }
+=======
+       if ( err ) {
+         console.log('Error occurred: ' + err);
+         return;
+       }
+       data.tracks.items[0].artists.forEach(function(artist){
+         console.log('Artist Name:', artist.name);
+       })
+       console.log('Album Name:', data.tracks.items[0].album.name);
+       console.log('Song Name:', data.tracks.items[0].name);
+       console.log('Preview Url:', data.tracks.items[0].preview_url);
+     });
+   }
+   break;
+ case "movie-this":
+   var movie = process.argv[3];
+   if(!movie){
+     movie = "Mr. Nobody"
+     Request("http://www.omdbapi.com/?t="+movie+"&y=&plot=short&r=json", function (error, response, body) {
+       if (!error && response.statusCode == 200) {
+         bodyJSON = JSON.parse(body)
+         console.log("Movie Title:", bodyJSON.Title)
+         console.log("Movie Year:", bodyJSON.Year)
+         console.log("IMDB Rating:", bodyJSON.imdbRating)
+         console.log("Movie Origin:", bodyJSON.Country)
+         console.log("Available Languages:", bodyJSON.Language)
+         console.log("Movie Plot:", bodyJSON.Plot)
+         console.log("Movie Actors:", bodyJSON.Actors)
+         console.log("Metascore:", bodyJSON.Metascore)
+       }
+     });
+   } else {
+     Request("http://www.omdbapi.com/?t="+movie+"&y=&plot=short&r=json", function (error, response, body) {
+       if (!error && response.statusCode == 200) {
+         bodyJSON = JSON.parse(body)
+         console.log("Movie Title:", bodyJSON.Title)
+         console.log("Movie Year:", bodyJSON.Year)
+         console.log("IMDB Rating:", bodyJSON.imdbRating)
+         console.log("Movie Origin:", bodyJSON.Country)
+         console.log("Available Languages:", bodyJSON.Language)
+         console.log("Movie Plot:", bodyJSON.Plot)
+         console.log("Movie Actors:", bodyJSON.Actors)
+         console.log("Metascore:", bodyJSON.Metascore)
+       }
+     });
+   }
+   break;
+ case "do-what-it-says":
+   var filename = process.argv[3];
+   fs.readFile(filename, function(error, data){
+     if(error) {
+       console.log(error);
+     } else {
+       console.log(data.toString().split(","));
+     }
+   });
+   break;
+ default:
+   console.log("Tara knows...")
+   break
+}
+>>>>>>> b7266acf9cfa01bb8a6120339c3eb3d19245ca8f
