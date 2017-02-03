@@ -12,8 +12,9 @@ var client = new Twitter({
 });
 
 var command = process.argv[2];
+var input = process.argv[3];
 
-function commandHandler(commandType) {
+function commandHandler(commandType, commandSpecifics) {
   switch(commandType) {
     case "my-tweets":
       client.get('statuses/user_timeline', {screen_name: 'freecodemine'}, function(error, tweets, response){
@@ -25,7 +26,7 @@ function commandHandler(commandType) {
       });
       break;
     case "spotify-this-song":
-      var song = process.argv[3];
+      var song = commandSpecifics;
       if(!song) {
         console.log('"The Sign" by Ace of Base')
       } else {
@@ -36,15 +37,15 @@ function commandHandler(commandType) {
          }
          data.tracks.items[0].artists.forEach(function(artist){
            console.log('Artist Name:', artist.name);
-         })
+         });
          console.log('Album Name:', data.tracks.items[0].album.name);
          console.log('Song Name:', data.tracks.items[0].name);
          console.log('Preview Url:', data.tracks.items[0].preview_url);
        });
-     }
-     break;
+      }
+      break;
     case "movie-this":
-      var movie = process.argv[3];
+      var movie = commandSpecifics;
       if(!movie){
         movie = "Mr. Nobody"
         Request("http://www.omdbapi.com/?t="+movie+"&y=&plot=short&r=json", function (error, response, body) {
@@ -67,15 +68,14 @@ function commandHandler(commandType) {
       }
       break;
     case "do-what-it-says":
-      var filename = process.argv[3];
+      var filename = commandSpecifics;
         fs.readFile(filename, function(error, data){
           if(error) {
             console.log(error);
           } else {
             var fileReadCommand = data.toString().trim().split(",")
             var newCommand = fileReadCommand.join(" ");
-            // console.log(newCommand);
-            commandHandler(newCommand)
+            commandHandler(fileReadCommand[0],fileReadCommand[1])
           }
         });
       break;
@@ -85,4 +85,4 @@ function commandHandler(commandType) {
   }
 }
 
-commandHandler(command)
+commandHandler(command, input)
