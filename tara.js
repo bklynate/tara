@@ -46,7 +46,7 @@ function commandHandler(commandType, commandSpecifics) {
       break;
     case "movie-this":
       var movie = commandSpecifics;
-      if(!movie){
+      if(!movie) {
         movie = "Mr. Nobody";
         Request("http://www.omdbapi.com/?t="+movie+"&y=&plot=short&r=json", function (error, response, body) {
           if (!error && response.statusCode == 200) {
