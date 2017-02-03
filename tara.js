@@ -13,142 +13,76 @@ var client = new Twitter({
 
 var command = process.argv[2];
 
-switch(command) {
-  case "my-tweets":
-    client.get('statuses/user_timeline', {screen_name: 'freecodemine'}, function(error, tweets, response){
-      if (!error) {
-        tweets.forEach(function(tweet){
-          console.log(tweet.text);
-        })
-      }
-    });
-    break;
-  case "spotify-this-song":
-    var song = process.argv[3];
-    if(!song) {
-      console.log('"The Sign" by Ace of Base')
-    } else {
-      Spotify.search({ type: 'track', query: song, limit: 5 }, function(err, data) {
-<<<<<<< HEAD
-        if ( err ) {
-          console.log('Error occurred: ' + err);
-          return;
-        }
-        data.tracks.items[0].artists.forEach(function(artist){
-          console.log('Artist Name:', artist.name);
-        })
-        console.log('Album Name:', data.tracks.items[0].album.name);
-        console.log('Song Name:', data.tracks.items[0].name);
-        console.log('Preview Url:', data.tracks.items[0].preview_url);
-      });
-    }
-    break;
-  case "movie-this":
-    var movie = process.argv[3];
-    if(!movie){
-      movie = "Mr. Nobody"
-      Request("http://www.omdbapi.com/?t="+movie+"&y=&plot=short&r=json", function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-          bodyJSON = JSON.parse(body)
-          console.log("Movie Title:", bodyJSON.Title)
-          console.log("Movie Year:", bodyJSON.Year)
-          console.log("IMDB Rating:", bodyJSON.imdbRating)
-          console.log("Movie Origin:", bodyJSON.Country)
-          console.log("Available Languages:", bodyJSON.Language)
-          console.log("Movie Plot:", bodyJSON.Plot)
-          console.log("Movie Actors:", bodyJSON.Actors)
-          console.log("Metascore:", bodyJSON.Metascore)
+function commandHandler(commandType) {
+  switch(commandType) {
+    case "my-tweets":
+      client.get('statuses/user_timeline', {screen_name: 'freecodemine'}, function(error, tweets, response){
+        if (!error) {
+          tweets.forEach(function(tweet){
+            console.log(tweet.text);
+          })
         }
       });
-    } else {
-      Request("http://www.omdbapi.com/?t="+movie+"&y=&plot=short&r=json", function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-          bodyJSON = JSON.parse(body)
-          console.log("Movie Title:", bodyJSON.Title)
-          console.log("Movie Year:", bodyJSON.Year)
-          console.log("IMDB Rating:", bodyJSON.imdbRating)
-          console.log("Movie Origin:", bodyJSON.Country)
-          console.log("Available Languages:", bodyJSON.Language)
-          console.log("Movie Plot:", bodyJSON.Plot)
-          console.log("Movie Actors:", bodyJSON.Actors)
-          console.log("Metascore:", bodyJSON.Metascore)
-        }
-      });
-    }
-    break;
-  case "do-what-it-says":
-    var filename = process.argv[3];
-    fs.readFile(filename, function(error, data){
-      if(error) {
-        console.log(error);
+      break;
+    case "spotify-this-song":
+      var song = process.argv[3];
+      if(!song) {
+        console.log('"The Sign" by Ace of Base')
       } else {
-        console.log(data.toString().split(","));
-      }
-    });
-    break;
-  default:
-    console.log("Tara knows...")
-    break
-}
-=======
-       if ( err ) {
-         console.log('Error occurred: ' + err);
-         return;
-       }
-       data.tracks.items[0].artists.forEach(function(artist){
-         console.log('Artist Name:', artist.name);
-       })
-       console.log('Album Name:', data.tracks.items[0].album.name);
-       console.log('Song Name:', data.tracks.items[0].name);
-       console.log('Preview Url:', data.tracks.items[0].preview_url);
-     });
-   }
-   break;
- case "movie-this":
-   var movie = process.argv[3];
-   if(!movie){
-     movie = "Mr. Nobody"
-     Request("http://www.omdbapi.com/?t="+movie+"&y=&plot=short&r=json", function (error, response, body) {
-       if (!error && response.statusCode == 200) {
-         bodyJSON = JSON.parse(body)
-         console.log("Movie Title:", bodyJSON.Title)
-         console.log("Movie Year:", bodyJSON.Year)
-         console.log("IMDB Rating:", bodyJSON.imdbRating)
-         console.log("Movie Origin:", bodyJSON.Country)
-         console.log("Available Languages:", bodyJSON.Language)
-         console.log("Movie Plot:", bodyJSON.Plot)
-         console.log("Movie Actors:", bodyJSON.Actors)
-         console.log("Metascore:", bodyJSON.Metascore)
-       }
-     });
-   } else {
-     Request("http://www.omdbapi.com/?t="+movie+"&y=&plot=short&r=json", function (error, response, body) {
-       if (!error && response.statusCode == 200) {
-         bodyJSON = JSON.parse(body)
-         console.log("Movie Title:", bodyJSON.Title)
-         console.log("Movie Year:", bodyJSON.Year)
-         console.log("IMDB Rating:", bodyJSON.imdbRating)
-         console.log("Movie Origin:", bodyJSON.Country)
-         console.log("Available Languages:", bodyJSON.Language)
-         console.log("Movie Plot:", bodyJSON.Plot)
-         console.log("Movie Actors:", bodyJSON.Actors)
-         console.log("Metascore:", bodyJSON.Metascore)
-       }
-     });
-   }
-   break;
- case "do-what-it-says":
-   var filename = process.argv[3];
-   fs.readFile(filename, function(error, data){
-     if(error) {
-       console.log(error);
-     } else {
-       console.log(data.toString().split(","));
+        Spotify.search({ type: 'track', query: song, limit: 5 }, function(err, data) {
+         if ( err ) {
+           console.log('Error occurred: ' + err);
+           return;
+         }
+         data.tracks.items[0].artists.forEach(function(artist){
+           console.log('Artist Name:', artist.name);
+         })
+         console.log('Album Name:', data.tracks.items[0].album.name);
+         console.log('Song Name:', data.tracks.items[0].name);
+         console.log('Preview Url:', data.tracks.items[0].preview_url);
+       });
      }
-   });
-   break;
- default:
-   console.log("Tara knows...")
-   break
+     break;
+    case "movie-this":
+      var movie = process.argv[3];
+      if(!movie){
+        movie = "Mr. Nobody"
+        Request("http://www.omdbapi.com/?t="+movie+"&y=&plot=short&r=json", function (error, response, body) {
+          if (!error && response.statusCode == 200) {
+            var bodyJSON = JSON.parse(body)
+            for(let prop in bodyJSON) {
+              console.log(prop +":", bodyJSON[prop]);
+            }
+          }
+        });
+      } else {
+        Request("http://www.omdbapi.com/?t="+movie+"&y=&plot=short&r=json", function (error, response, body) {
+          if (!error && response.statusCode == 200) {
+            bodyJSON = JSON.parse(body)
+            for(let prop in bodyJSON) {
+              console.log(prop +":", bodyJSON[prop]);
+            }
+          }
+        });
+      }
+      break;
+    case "do-what-it-says":
+      var filename = process.argv[3];
+        fs.readFile(filename, function(error, data){
+          if(error) {
+            console.log(error);
+          } else {
+            var fileReadCommand = data.toString().trim().split(",")
+            var newCommand = fileReadCommand.join(" ");
+            // console.log(newCommand);
+            commandHandler(newCommand)
+          }
+        });
+      break;
+    default:
+      console.log("Tara knows...")
+      break
+  }
 }
->>>>>>> b7266acf9cfa01bb8a6120339c3eb3d19245ca8f
+
+commandHandler(command)
