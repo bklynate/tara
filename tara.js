@@ -21,14 +21,14 @@ function commandHandler(commandType, commandSpecifics) {
         if (!error) {
           tweets.forEach(function(tweet){
             console.log(tweet.text);
-          })
+          });
         }
       });
       break;
     case "spotify-this-song":
       var song = commandSpecifics;
       if(!song) {
-        console.log('"The Sign" by Ace of Base')
+        console.log('"The Sign" by Ace of Base');
       } else {
         Spotify.search({ type: 'track', query: song, limit: 5 }, function(err, data) {
          if ( err ) {
@@ -47,10 +47,10 @@ function commandHandler(commandType, commandSpecifics) {
     case "movie-this":
       var movie = commandSpecifics;
       if(!movie){
-        movie = "Mr. Nobody"
+        movie = "Mr. Nobody";
         Request("http://www.omdbapi.com/?t="+movie+"&y=&plot=short&r=json", function (error, response, body) {
           if (!error && response.statusCode == 200) {
-            var bodyJSON = JSON.parse(body)
+            var bodyJSON = JSON.parse(body);
             for(let prop in bodyJSON) {
               console.log(prop +":", bodyJSON[prop]);
             }
@@ -59,7 +59,7 @@ function commandHandler(commandType, commandSpecifics) {
       } else {
         Request("http://www.omdbapi.com/?t="+movie+"&y=&plot=short&r=json", function (error, response, body) {
           if (!error && response.statusCode == 200) {
-            bodyJSON = JSON.parse(body)
+            var bodyJSON = JSON.parse(body);
             for(let prop in bodyJSON) {
               console.log(prop +":", bodyJSON[prop]);
             }
@@ -73,16 +73,15 @@ function commandHandler(commandType, commandSpecifics) {
           if(error) {
             console.log(error);
           } else {
-            var fileReadCommand = data.toString().trim().split(",")
-            var newCommand = fileReadCommand.join(" ");
-            commandHandler(fileReadCommand[0],fileReadCommand[1])
+            var fileReadCommand = data.toString().trim().split(",");
+            commandHandler(fileReadCommand[0],fileReadCommand[1]);
           }
         });
       break;
     default:
-      console.log("Tara knows...")
-      break
+      console.log("Tara knows...");
+      break;
   }
 }
 
-commandHandler(command, input)
+commandHandler(command, input);
